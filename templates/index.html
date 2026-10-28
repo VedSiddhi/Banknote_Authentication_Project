@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Performance Predictor</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 30px 16px;
+    font-family: Arial, sans-serif;
+    color: #1e293b;
+    background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+}
+
+.container {
+    max-width: 760px;
+    margin: auto;
+    padding: 30px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px #0f172a18;
+}
+
+h1 { color: #1d4ed8; text-align: center; }
+.subtitle { text-align: center; color: #64748b; line-height: 1.5; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+}
+
+label { display: block; font-weight: bold; margin-bottom: 8px; }
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+small { display: block; margin-top: 6px; color: #64748b; }
+
+button {
+    width: 100%;
+    margin-top: 26px;
+    padding: 14px;
+    color: white;
+    background: #2563eb;
+    border: none;
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover { background: #1d4ed8; }
+
+.result, .error {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.result { background: #dcfce7; color: #166534; }
+.error { background: #fee2e2; color: #991b1b; }
+
+footer {
+    margin-top: 25px;
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+}
+
+@media (max-width: 540px) {
+    .grid { grid-template-columns: 1fr; }
+    .container { padding: 22px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Student Performance Predictor</h1>
+    <p class="subtitle">
+        Predict academic performance using Non-Linear SVM (RBF Kernel)
+    </p>
+
+    <form method="POST">
+        <div class="grid">
+            <div>
+                <label for="study_hours">Study hours per day</label>
+                <input id="study_hours" name="study_hours" type="number"
+                       min="0" max="24" step="any"
+                       value="{{ values.get('study_hours', '') }}" required>
+                <small>Reference: 0–10 hours/day</small>
+            </div>
+
+            <div>
+                <label for="attendance">Attendance (%)</label>
+                <input id="attendance" name="attendance" type="number"
+                       min="0" max="100" step="any"
+                       value="{{ values.get('attendance', '') }}" required>
+                <small>Range: 0–100%</small>
+            </div>
+
+            <div>
+                <label for="previous_marks">Previous exam marks (%)</label>
+                <input id="previous_marks" name="previous_marks"
+                       type="number" min="0" max="100" step="any"
+                       value="{{ values.get('previous_marks', '') }}" required>
+                <small>Range: 0–100%</small>
+            </div>
+
+            <div>
+                <label for="assignment_score">Assignment score (%)</label>
+                <input id="assignment_score" name="assignment_score"
+                       type="number" min="0" max="100" step="any"
+                       value="{{ values.get('assignment_score', '') }}" required>
+                <small>Range: 0–100%</small>
+            </div>
+
+            <div>
+                <label for="sleep_hours">Sleep hours per day</label>
+                <input id="sleep_hours" name="sleep_hours" type="number"
+                       min="0" max="24" step="any"
+                       value="{{ values.get('sleep_hours', '') }}" required>
+                <small>Reference: 3–10 hours/day</small>
+            </div>
+
+            <div>
+                <label for="classes_missed">Classes missed</label>
+                <input id="classes_missed" name="classes_missed"
+                       type="number" min="0" max="365" step="1"
+                       value="{{ values.get('classes_missed', '') }}" required>
+                <small>Enter a whole number</small>
+            </div>
+        </div>
+
+        <button type="submit">Predict Performance</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        Predicted Category: {{ result }}
+    </div>
+    <p class="subtitle">
+        This is an estimate from a demonstration model, not a guaranteed outcome.
+    </p>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <footer>
+        Machine Learning Lab | Non-Linear Support Vector Machine
+    </footer>
+</div>
+</body>
+</html>
